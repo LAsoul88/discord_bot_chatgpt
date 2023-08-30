@@ -6,8 +6,6 @@ import openai
 import discord
 from dotenv import load_dotenv
 
-from user_map import user_map
-
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 model_id = 'gpt-3.5-turbo'
