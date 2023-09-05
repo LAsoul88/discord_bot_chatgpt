@@ -26,8 +26,11 @@ async def on_message(message):
   if message.content.startswith('/help'):
     await message.channel.send('I would be happy to help! The following list of commands are available to you at this time:\n- /help - brings up list of available commands\n- /info [request] - asks chatgpt a question and returns information\n- /chat [request] - have a convo and see where things go\n- /joke [subject] - returns a joke on the listed subject')
 
-  # if message.content.startswith('/chat'):
-  #    await message.channel.send("Let's have a chat!")
+  if message.content.startswith('/chat'):
+    formatted_query = query.replace('/chat ', '')
+    reply = await brain.converse(formatted_query, f'Chat casually with {username} about the subject they bring up. Responses are expected to be light, fun, and silly!')
+    for section in reply:
+      await message.channel.send(section)
 
   if message.content.startswith('/info'):
     formatted_query = query.replace('/info ', '')
