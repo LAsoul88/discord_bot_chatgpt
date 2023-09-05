@@ -29,8 +29,8 @@ async def on_message(message):
   # if message.content.startswith('/chat'):
   #    await message.channel.send("Let's have a chat!")
 
-  if message.content.startswith('/inf'):
-    formatted_query = query.replace('/inf ', '')
+  if message.content.startswith('/info'):
+    formatted_query = query.replace('/info ', '')
     reply = await brain.converse(formatted_query, f'Please help {username} with gathering information and address them as {username}. Please be descriptive, longer form answers are welcome.')
     for section in reply:
       await message.channel.send(section)
