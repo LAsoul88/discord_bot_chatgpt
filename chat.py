@@ -29,25 +29,11 @@ async def on_message(message):
   # if message.content.startswith('/chat'):
   #    await message.channel.send("Let's have a chat!")
 
-  if message.content.startswith('/info'):
-    formatted_query = query.replace('/info ', '')
-    reply = brain.converse(formatted_query, f'Please help {username} with gathering information and address them as {username}. Please be descriptive, longer form answers are welcome.')
-    if len(reply) > 2000:
-      print('reply > 2000')
-      reply_list = [sentence + '.' for sentence in reply.split('.') if sentence]
-      message_string = ''
-      for idx, sentence in enumerate(reply_list):
-        if len(sentence) + len(message_string) > 2000:
-          print('sending message_string')
-          await message.channel.send(message_string)
-          message_string = sentence
-        else:
-          print('adding to message_string')
-          message_string = message_string + sentence
-          if idx == len(reply_list) - 1:
-            await message.channel.send(message_string)
-    else:
-      await message.channel.send(reply)
+  if message.content.startswith('/inf'):
+    formatted_query = query.replace('/inf ', '')
+    reply = await brain.converse(formatted_query, f'Please help {username} with gathering information and address them as {username}. Please be descriptive, longer form answers are welcome.')
+    for section in reply:
+      await message.channel.send(section)
 
   if message.content.startswith('/joke'):
     formatted_query = query.replace('/joke ', 'Can you tell me a joke about ')
