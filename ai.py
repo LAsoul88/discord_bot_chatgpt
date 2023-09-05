@@ -27,8 +27,24 @@ class Brain:
   def record(self, message, role):
     self.collection.insert_one({ 'role': role, 'content': message, 'timestamp': datetime.now() })
 
+  def format_response(self, response):
+    if len(response) > 2000:
+      response_list = [sentence + '.' for sentence in response.split('.') if sentence]
+      message_string = ''
+      message_list = []
+      for idx, sentence in enumerate(response_list):
+        if len(sentence) + len(message_string) > 2000:
+          message_list.append(message_string)
+          message_string = sentence
+        else:
+          message_string = message_string + sentence
+          if idx == len(response_list) - 1:
+            message_list.append(message_string)
+      return message_list
+    return [response]
+
   # handles formatting of call to openai API and returns response
-  def converse(self, content, directive):
+  async def converse(self, content, directive):
     self.record(content, 'user')
     message_history = self.collection.find().sort('timestamp', -1)
     self.message_chain.append({ 'role': 'system', 'content': directive })
@@ -46,4 +62,4 @@ class Brain:
       messages=self.message_chain
     )['choices'][0]['message']['content']
     self.record(response, 'assistant')
-    return response
+    return self.format_response(response)
